@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block head %}
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<link rel="stylesheet" href="css/bootstrap-grid.min.css">
-	<link rel="stylesheet" href="css/air-datepicker.css">
+	<link rel="stylesheet" href="{% static 'css/slick.min.css' %}" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="{% static 'css/slick-theme.min.css' %}" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="{% static 'css/bootstrap-grid.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/air-datepicker.css' %}">
 	<script src="{% static 'js/air-datepicker.js' %}"></script>
 	<link rel="stylesheet" href="{% static 'css/main.css' %}">
 {% endblock %}
@@ -21,7 +21,7 @@
 							</a>
 						</div>
 						<div class="col-3 col-md-2">
-							<img src="{% static 'mg/x.svg' %}" alt="x" class="mobMenuClose">
+							<img src="{% static 'img/x.svg' %}" alt="x" class="mobMenuClose">
 						</div>
 					</div>
 				</div>
@@ -44,7 +44,7 @@
 									<li class="accaunt__menu_item active">
 										<a href="#" class="accaunt__menu_item__link">
 											<div class="accaunt__menu_block fic">
-												<img src="{% static 'mg/icons/list.svg' %}" alt="icon" class="accaunt__menu_icon">
+												<img src="{% static 'img/icons/list.svg' %}" alt="icon" class="accaunt__menu_icon">
 												<span class="accaunt__menu_item__link_intro">Мои записи</span>
 											</div>	
 										</a>
@@ -60,7 +60,7 @@
 									<li class="accaunt__menu_item">
 										<a href="#" class="accaunt__menu_item__link">
 											<div class="accaunt__menu_block fic">
-												<img src="{% static 'mg/icons/tex.svg' %}" alt="icon" class="accaunt__menu_icon">
+												<img src="{% static 'img/icons/tex.svg' %}" alt="icon" class="accaunt__menu_icon">
 												<span class="accaunt__menu_item__link_intro">Тех. поддержка</span>
 											</div>	
 										</a>
@@ -68,7 +68,7 @@
 									<li class="accaunt__menu_item">
 										<a href="#" class="accaunt__menu_item__link">
 											<div class="accaunt__menu_block fic">
-												<img src="{% static 'mg/icons/pay.svg' %}" alt="icon" class="accaunt__menu_icon">
+												<img src="{% static 'img/icons/pay.svg' %}" alt="icon" class="accaunt__menu_icon">
 												<span class="accaunt__menu_item__link_intro">Платежи</span>
 											</div>	
 										</a>
@@ -296,8 +296,8 @@
 			</div>
 		</div>
 	</footer>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="{% static 'js/jquery.min.js' %}" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="{% static 'js/slick.min.js' %}" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	
 	<script src="{% static 'js/main.js' %}"></script>
 </body>
