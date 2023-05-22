@@ -7,9 +7,9 @@
 	<link rel="stylesheet" href="{% static 'css/simple.css' %}">
 	<link rel="stylesheet" href="{% static 'css/main.css' %}">
 {% endblock %}
-{% block content %}
-<body class="notesPage">
-	<section id="mobMenu">
+{% block body %} class="notesPage"{% endblock %}
+{%  block mobMenu %}
+    <section id="mobMenu">
 			<div class="mobMenu accMenu">
 				<div class="container">
 				<div class="mobMenu__header">
@@ -45,7 +45,7 @@
 											<div class="accaunt__menu_block fic">
 												<img src="{% static 'img/icons/list.svg' %}" alt="icon" class="accaunt__menu_icon">
 												<span class="accaunt__menu_item__link_intro">Мои записи</span>
-											</div>	
+											</div>
 										</a>
 									</li>
 									<li class="accaunt__menu_item">
@@ -53,7 +53,7 @@
 											<div class="accaunt__menu_block fic">
 												<img src="{% static 'img/icons/settings.svg' %}" alt="icon" class="accaunt__menu_icon">
 												<span class="accaunt__menu_item__link_intro">Настройки</span>
-											</div>	
+											</div>
 										</a>
 									</li>
 									<li class="accaunt__menu_item">
@@ -61,7 +61,7 @@
 											<div class="accaunt__menu_block fic">
 												<img src="{% static 'img/icons/tex.svg' %}" alt="icon" class="accaunt__menu_icon">
 												<span class="accaunt__menu_item__link_intro">Тех. поддержка</span>
-											</div>	
+											</div>
 										</a>
 									</li>
 									<li class="accaunt__menu_item">
@@ -69,7 +69,7 @@
 											<div class="accaunt__menu_block fic">
 												<img src="{% static 'img/icons/pay.svg' %}" alt="icon" class="accaunt__menu_icon">
 												<span class="accaunt__menu_item__link_intro">Платежи</span>
-											</div>	
+											</div>
 										</a>
 									</li>
 								</ul>
@@ -98,44 +98,8 @@
 			</div>
 		</div>
 	</section>
-	<header id="header">
-		<div class="container">
-			<div class="header">
-				<div class="row">
-					<div class="col-2 col-md-2 mob">
-						<img src="{% static 'img/hamburger.svg' %}" alt="hamburger" class="header__mobMenu">
-					</div>
-					<div class="col-5 col-md-3 col-lg-2">
-						<a href="/">
-							<img src="{% static 'img/Logo.svg' %}" alt="Logo" class="logo header__logo">
-						</a>
-					</div>
-					<div class="col-md-5 ">
-						<nav>
-						<ul class="menu">
-							<li class="menu__item"><a href="#" class="menu__item_link">Мастера</a></li>
-							<li class="menu__item"><a href="#" class="menu__item_link">Услуги</a></li>
-							<li class="menu__item"><a href="#" class="menu__item_link">Отзывы</a></li>
-							<li class="menu__item"><a href="#" class="menu__item_link">Контакты</a></li>
-						</ul>
-					</nav>
-					</div>
-					<div class="col-3 col-md-2 col-lg-3">
-						<div class="header__block">
-						<a href="tel:+79179023800"><button class="header__block_btn">Перезвоните мне</button></a>
-						<div class="header__block_auth">
-							<img src="{% static 'img/avatars/1.svg' %}" alt="account" class="header__account_img">
-							<span class="header__block_auth__intro">Алиса И.</span>
-						</div>
-					</div>
-					</div>
-				</div>
-				
-				
-				
-			</div>
-		</div>
-	</header>
+{% endblock %}
+{% block content %}
 	<section id="notes">
 		<div class="container">
 			<div class="notes">
@@ -388,77 +352,9 @@
 				</div>
 			</div>
 		</div>
-	</section> 
-	<footer id="footer">
-		<div class="container">
-			<div class="footer">
-				<div class="footer__block">
-					<div class="row">
-						<div class="col-md-3 col-lg-2">
-							<a href="/"><img src="{% static 'img/Logo.svg' %}" alt="logo" class="footer__logo"></a>
-						</div>
-						<div class="col-md-5 minMobHide">
-							<nav>
-								<ul class="menu">
-									<li class="menu__item"><a href="#" class="menu__item_link">Мастера</a></li>
-									<li class="menu__item"><a href="#" class="menu__item_link">Услуги</a></li>
-									<li class="menu__item"><a href="#" class="menu__item_link">Отзывы</a></li>
-									<li class="menu__item"><a href="#" class="menu__item_link">Контакты</a></li>
-								</ul>
-							</nav>
-						</div>
-					</div>
-					<div class="footer__contact">
-						<div class="row">
-							<div class="col-md-4">
-								
-									<div class="footer__data">с 10:00 до 20:00  без выходных</div>
-									
-							</div>
-							<div class="col-md-3">
-								<a href="tel:+79179023800" class="contacts__info_tel">+7 (917) 902 38 00</a>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-5 minMobShow">
-								<nav>
-									<ul class="menu">
-										<li class="menu__item"><a href="#" class="menu__item_link">Мастера</a></li>
-										<li class="menu__item"><a href="#" class="menu__item_link">Услуги</a></li>
-										<li class="menu__item"><a href="#" class="menu__item_link">Отзывы</a></li>
-										<li class="menu__item"><a href="#" class="menu__item_link">Контакты</a></li>
-									</ul>
-								</nav>
-							</div>
-						</div>
-					</div>
-					<hr class="hr"></hr>
-					<div class="footer__bottom">
-						<div class="row">
-							<div class="col-md-4 col-lg-3">
-								<a href="#" class="footer__link">Политика конфиденциальности</a>
-							</div>
-							<div class="col-md-3">
-								<div class="footer__copy">2022. Все права защищены</div>
-							</div>
-							<div class="col-md-3 col-lg-2">
-								<div class="footer__social fic">
-									<a href=""><img src="{% static 'img/waGray.svg' %}" alt="wa" class="contacts__social_icon"></a>
-									<a href=""><img src="{% static 'img/vkGray.svg' %}" alt="vk" class="contacts__social_icon"></a>
-									<a href=""><img src="{% static 'img/tgGray.svg' %}" alt="tg" class="contacts__social_icon"></a>
-									<a href=""><img src="{% static 'img/instaGray.svg' %}" alt="insta" class="contacts__social_icon"></a>
-								</div>
-							</div>
-						</div>
-						
-						
-						
-					</div>
-					
-				</div>
-			</div>
-		</div>
-	</footer>
+	</section>
+{% endblock %}
+{% block end %}
 	<div style="display: none;">
 		<div class="box-modal paymentPopup popup" id="paymentModal">
 			<div class="box-modal_close arcticmodal-close"><img src="{% static 'img/x.svg' %}" alt="x"></div>
@@ -517,5 +413,4 @@
 	<script src="{% static 'js/air-datepicker.js' %}"></script>
 	<script src="{% static 'js/jquery.arcticmodal-0.3.min.js' %}"></script>
 	<script src="{% static 'js/main.js' %}"></script>
-</body>
 {% endblock %}
