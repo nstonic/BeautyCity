@@ -1,5 +1,7 @@
-from django.views.generic import TemplateView
+from pprint import pprint
 
+from django.shortcuts import redirect
+from django.views.generic import TemplateView
 
 # from services.models import Salon, Service, Master
 
@@ -37,3 +39,9 @@ class MakeOrder(TemplateView):
             'services': services
         })
         return context
+
+    def post(self, request, *args, **kwargs):
+        pprint(request.POST)
+        print('=============================')
+        pprint(request.body)
+        return redirect('configure_order')
