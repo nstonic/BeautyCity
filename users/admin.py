@@ -9,6 +9,7 @@ class ClientAdmin(admin.ModelAdmin):
         'phone_number',
     )
 
+
 @admin.register(Master)
 class MasterAdmin(admin.ModelAdmin):
     list_display = (
