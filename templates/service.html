@@ -73,6 +73,7 @@
             <form id="order" action="#" class="service__form" method="post">
                 {% csrf_token %}
                 <div class="service__form_block service__salons">
+                    <input id="js-salon" name="salon" type="hidden">
                     <button class="accordion">(Выберите салон)</button>
                     <div class="panel">
                         {% for salon in salons %}
@@ -84,6 +85,7 @@
                     </div>
                 </div>
                 <div class="service__form_block service__services">
+                    <input class="js-selection" name="service" type="hidden">
                     <button class="accordion">(Выберите услугу)</button>
                     <div class="panel">
                         {% for service in services %}
@@ -95,6 +97,7 @@
                     </div>
                 </div>
                 <div class="service__form_block service__masters">
+                    <input class="js-selection" name="master" type="hidden">
                     <button class="accordion">(Выберите мастера)</button>
                     <div class="panel">
                         {% for master in masters %}
