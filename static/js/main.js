@@ -150,7 +150,7 @@ $(document).ready(function() {
 		thisAddress = $(this).find('> .accordion__block_address').text()
 
 		// $("#js-salon").val(thisAddress)
-		$(this).parent().parent().find()
+		$(this).parent().parent().find('> input').val(thisName)
 		$(this).parent().parent().find('> button.active').addClass('selected').text(thisName + '  ' +thisAddress)
 		setTimeout(() => {
 			$(this).parent().parent().find('> button.active').click()

@@ -1,9 +1,12 @@
 from pprint import pprint
 from django.shortcuts import redirect
+from django.utils.timezone import now
 from django.views.generic import TemplateView
 
+from orders.forms import OrderForm
+from orders.models import Order
 from services.models import Salon, Service
-from users.models import Master
+from users.models import Master, Client
 
 
 class MakeOrder(TemplateView):
@@ -14,25 +17,6 @@ class MakeOrder(TemplateView):
         salons = Salon.objects.all()
         services = Service.objects.all()
         masters = Master.objects.all()
-        masters = [
-            {'name': 'Ольга',
-             'salon': 'ул. Пушкинская, д. 78А'},
-            {'name': 'Татьяна',
-             'salon': 'ул. Пушкинская, д. 78А'}
-        ]
-        salons = [
-            {'id': 1,
-             'name': 'BeautyCity Пушкинская',
-             'address': 'ул. Пушкинская, д. 78А'}
-        ]
-        services = [
-            {'name': 'Мейкап',
-             'price': 1000},
-            {'name': 'Покраска волос',
-             'price': 2000},
-            {'name': 'Маникюр',
-             'price': 3000}
-        ]
 
         context.update({
             'masters': masters,
@@ -42,7 +26,22 @@ class MakeOrder(TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        pprint(request.POST)
-        print('=============================')
-        pprint(request.body)
+        order_form = OrderForm(request.POST)
+        if order_form.is_valid():
+            master_name = request.POST.get('master')
+            salon_name = request.POST.get('salon')
+            service_name = request.POST.get('service')
+            master = Master.objects.get(name=master_name)
+            salon = Salon.objects.get(name=salon_name)
+            service = Service.objects.get(name=service_name)
+            client = Client.objects.get(pk=1)
+            Order.objects.create(
+                salon=salon,
+                master=master,
+                service=service,
+                client=client,
+                time=now(),
+                cost=service.price,
+                comment='comment'
+            )
         return redirect('configure_order')
