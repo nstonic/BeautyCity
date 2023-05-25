@@ -8,7 +8,7 @@ from services.models import Salon, Service
 from users.models import Master, Client
 
 
-def order_final(request):
+def order_final(request, order_id):
     return render(request, 'serviceFinally.html')
 
 
@@ -36,7 +36,8 @@ class MakeOrder(TemplateView):
         )
         order_form = OrderForm(input_form)
         if order_form.is_valid():
-            order_form.save()
+            order = order_form.save()
+            return redirect('final_order', order_id=order.pk)
         else:
             context = self.get_context_data(**kwargs)
 
@@ -49,7 +50,6 @@ class MakeOrder(TemplateView):
                 self.template_name,
                 context,
             )
-        return redirect('final_order')
 
     @staticmethod
     def get_input_form(input_form):
@@ -63,4 +63,6 @@ class MakeOrder(TemplateView):
             date = datetime.strptime(date_input, '%a, %d %b %Y %H:%M:%S %Z')
             time = datetime.strptime(time_input, '%H:%M')
             form['time'] = date.replace(hour=time.hour, minute=time.minute, second=0)
+        service = Service.objects.get(pk=form.get('service'))
+        form['cost'] = service.price
         return form
