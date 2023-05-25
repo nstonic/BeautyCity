@@ -8,6 +8,10 @@ from services.models import Salon, Service
 from users.models import Master, Client
 
 
+def order_final(request):
+    return render(request, 'serviceFinally.html')
+
+
 class MakeOrder(TemplateView):
     template_name = 'service.html'
 
@@ -45,7 +49,7 @@ class MakeOrder(TemplateView):
                 self.template_name,
                 context,
             )
-        return redirect('configure_order')
+        return redirect('final_order')
 
     @staticmethod
     def get_input_form(input_form):
