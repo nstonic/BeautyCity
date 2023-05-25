@@ -1,4 +1,3 @@
-from pprint import pprint
 from django.shortcuts import redirect
 from django.utils.timezone import now
 from django.views.generic import TemplateView
@@ -34,14 +33,13 @@ class MakeOrder(TemplateView):
             master = Master.objects.get(name=master_name)
             salon = Salon.objects.get(name=salon_name)
             service = Service.objects.get(name=service_name)
-            client = Client.objects.get(pk=1)
+            client = Client.objects.get(pk='+12125552368')
             Order.objects.create(
                 salon=salon,
                 master=master,
                 service=service,
                 client=client,
                 time=now(),
-                cost=service.price,
-                comment='comment'
+                cost=service.price
             )
         return redirect('configure_order')
