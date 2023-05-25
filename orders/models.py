@@ -14,7 +14,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
 
     class Meta:
-        unique_together = ['salon', 'master', 'service', 'time']
+        unique_together = ['master', 'time']
 
     def __str__(self):
         return f'{self.master} - {self.service}, {self.time}'
