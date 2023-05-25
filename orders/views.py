@@ -8,11 +8,14 @@ from services.models import Salon, Service
 from users.models import Master, Client
 
 
+def order_final(request, order_id):
+    return render(request, 'serviceFinally.html')
+
+
 class MakeOrder(TemplateView):
     template_name = 'service.html'
 
     def get_context_data(self, **kwargs):
-
         context = super().get_context_data(**kwargs)
         context.update({
             'masters': Master.objects.all(),
@@ -20,6 +23,10 @@ class MakeOrder(TemplateView):
             'services': Service.objects.all(),
             'orders': Order.objects.all()
         })
+        if master_id := kwargs.get('master_id'):
+            context.update({
+                'master': Master.objects.filter(pk=master_id).first()
+            })
         return context
 
     def post(self, request, *args, **kwargs):
@@ -32,7 +39,8 @@ class MakeOrder(TemplateView):
         )
         order_form = OrderForm(input_form)
         if order_form.is_valid():
-            order_form.save()
+            order = order_form.save()
+            return redirect('final_order', order_id=order.pk)
         else:
             context = self.get_context_data(**kwargs)
 
@@ -45,7 +53,6 @@ class MakeOrder(TemplateView):
                 self.template_name,
                 context,
             )
-        return redirect('configure_order')
 
     @staticmethod
     def get_input_form(input_form):
@@ -59,4 +66,9 @@ class MakeOrder(TemplateView):
             date = datetime.strptime(date_input, '%a, %d %b %Y %H:%M:%S %Z')
             time = datetime.strptime(time_input, '%H:%M')
             form['time'] = date.replace(hour=time.hour, minute=time.minute, second=0)
+        if service_id := form.get('service'):
+            service = Service.objects.get(pk=service_id)
+            form['cost'] = service.price
+        else:
+            form['cost'] = 0
         return form

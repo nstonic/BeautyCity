@@ -11,9 +11,10 @@ class Order(models.Model):
     time = models.DateTimeField(verbose_name='Order Time')
     cost = models.IntegerField(verbose_name='Order Cost')
     comment = models.TextField(verbose_name='Order Comment', max_length=300, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
 
     class Meta:
-        unique_together = ['salon', 'master', 'service', 'time']
+        unique_together = ['master', 'time']
 
     def __str__(self):
         return f'{self.master} - {self.service}, {self.time}'
