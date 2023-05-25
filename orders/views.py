@@ -25,21 +25,16 @@ class MakeOrder(TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
+
         order_form = OrderForm(request.POST)
         if order_form.is_valid():
-            master_name = request.POST.get('master')
-            salon_name = request.POST.get('salon')
-            service_name = request.POST.get('service')
-            master = Master.objects.get(name=master_name)
-            salon = Salon.objects.get(name=salon_name)
-            service = Service.objects.get(name=service_name)
-            client = Client.objects.get(pk='+12125552368')
-            Order.objects.create(
-                salon=salon,
-                master=master,
-                service=service,
-                client=client,
-                time=now(),
-                cost=service.price
-            )
+            order_form.save()
+            # Order.objects.create(
+            #     salon=order_form.cleaned_data['salon'],
+            #     service=order_form.cleaned_data['service'],
+            #     master=order_form.cleaned_data['master'],
+            #     client=order_form.cleaned_data['client'],
+            #     time=now(),
+            #     cost=order_form.cleaned_data['service'].price
+            # )
         return redirect('configure_order')

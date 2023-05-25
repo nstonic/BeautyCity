@@ -71,14 +71,16 @@
           <button class="service__btn btn">Запись по телефону</button>
         </div>
 
-        <form id="order" action="#" class="service__form" method="post">
+        <form action="#" class="service__form" method="post">
           {% csrf_token %}
+          <input name="phone_number" type="hidden">
           <div class="service__form_block service__salons">
-            <input id="js-salon" name="salon" type="hidden">
+            <div class="d-none">salon-input</div>
             <button class="accordion">(Выберите салон)</button>
             <div class="panel">
               {% for salon in salons %}
                 <div class="accordion__block fic">
+                  <div class="d-none">{{ salon.id }}</div>
                   <div class="accordion__block_intro">{{ salon.name }}</div>
                   <div class="accordion__block_address">{{ salon.address }}</div>
                 </div>
@@ -86,11 +88,12 @@
             </div>
           </div>
           <div class="service__form_block service__services">
-            <input class="js-selection" name="service" type="hidden">
+            <div class="d-none">service-input</div>
             <button class="accordion">(Выберите услугу)</button>
             <div class="panel">
               {% for service in services %}
                 <div class="accordion__block fic">
+                  <div class="d-none">{{ service.id }}</div>
                   <div class="accordion__block_intro">{{ service.name }}</div>
                   <div class="accordion__block_address">{{ service.price }}</div>
                 </div>
@@ -98,11 +101,12 @@
             </div>
           </div>
           <div class="service__form_block service__masters">
-            <input class="js-selection" name="master" type="hidden">
+            <div class="d-none">master-input</div>
             <button class="accordion">(Выберите мастера)</button>
             <div class="panel">
               {% for master in masters %}
                 <div class="accordion__block fic">
+                  <div class="d-none">{{ master.id }}</div>
                   <div class="accordion__block_intro">{{ master.name }}</div>
                   <div class="accordion__block_address">{{ master.salon }}</div>
                 </div>
@@ -165,10 +169,16 @@
                     <div class="modal-body">
                       <div class="authPopup popup">
                         <div class="popup__title authPopup__title">Войти по коду</div>
-                        <p class="popup__text authPopup__text">Введите свой номер телефона, мы вышлем на него код</p>
-                        <form action="#" class="authPopup__form">
+                        <p class="popup__text authPopup__text">Введите свой номер телефона</p>
+                        <form id="order" action="#" class="authPopup__form" method="post">
+                          {% csrf_token %}
                           <div class="contacts__form_inputBlock">
-                            <input type="text" name="tel" class="contacts__form_iunput" placeholder="+7(999)999--99-99"
+                            <input id="salon-input" type="hidden" name="salon">
+                            <input id="master-input" type="hidden" name="master">
+                            <input id="service-input" type="hidden" name="service">
+
+                            <input type="text" name="client" class="contacts__form_iunput"
+                                   placeholder="+7(999)999--99-99"
                                    required="">
                           </div>
                           <div class="contacts__form_checkboxBlock fic">
