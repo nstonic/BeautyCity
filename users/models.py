@@ -5,7 +5,7 @@ from services.models import Service, Salon
 
 
 class Client(models.Model):
-    name = models.CharField(max_length=50, verbose_name='Client Name')
+    name = models.CharField(max_length=50, verbose_name='Client Name', blank=True, null=True)
     phone_number = PhoneNumberField(verbose_name='Phone Number', primary_key=True, region='RU')
 
     def __str__(self):
