@@ -119,7 +119,11 @@
           </div>
           <div class="service__form_block service__masters">
             <div class="d-none">master-input</div>
-            <button class="accordion">(Выберите мастера)</button>
+            {% if master %}
+              <button class="accordion selected">{{ master.name }}</button>
+            {% else %}
+              <button class="accordion">(Выберите мастера)</button>
+            {% endif %}
             <div class="panel">
               {% for master in masters %}
                 <div class="accordion__block fic">
@@ -191,7 +195,11 @@
                           {% csrf_token %}
                           <div class="contacts__form_inputBlock">
                             <input id="salon-input" type="hidden" name="salon">
-                            <input id="master-input" type="hidden" name="master">
+                            {% if master %}
+                              <input id="master-input" type="hidden" name="master" value="{{ master.pk }}">
+                            {% else %}
+                              <input id="master-input" type="hidden" name="master">
+                            {% endif %}
                             <input id="service-input" type="hidden" name="service">
                             <input id="date-input" type="hidden" name="date">
                             <input id="time-input" type="hidden" name="time">
