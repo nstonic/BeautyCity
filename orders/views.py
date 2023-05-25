@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from django.utils.timezone import now
+from django.utils.datetime_safe import datetime
 from django.views.generic import TemplateView
 
 from orders.forms import OrderForm
@@ -12,29 +12,37 @@ class MakeOrder(TemplateView):
     template_name = 'service.html'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        salons = Salon.objects.all()
-        services = Service.objects.all()
-        masters = Master.objects.all()
 
+        context = super().get_context_data(**kwargs)
         context.update({
-            'masters': masters,
-            'salons': salons,
-            'services': services
+            'masters': Master.objects.all(),
+            'salons': Salon.objects.all(),
+            'services': Service.objects.all(),
+            'orders': Order.objects.all()
         })
         return context
 
     def post(self, request, *args, **kwargs):
-
-        order_form = OrderForm(request.POST)
+        cleaned_input_form = self._clean_input_order_form(
+            self.request.POST.copy()
+        )
+        Client.objects.get_or_create(
+            phone_number=cleaned_input_form.get('client'),
+            defaults={'name': 'Вася'}
+        )
+        order_form = OrderForm(cleaned_input_form)
         if order_form.is_valid():
             order_form.save()
-            # Order.objects.create(
-            #     salon=order_form.cleaned_data['salon'],
-            #     service=order_form.cleaned_data['service'],
-            #     master=order_form.cleaned_data['master'],
-            #     client=order_form.cleaned_data['client'],
-            #     time=now(),
-            #     cost=order_form.cleaned_data['service'].price
-            # )
+        else:
+            print(order_form.errors)
         return redirect('configure_order')
+
+    @staticmethod
+    def _clean_input_order_form(input_form):
+        phone_number = input_form.get('client')
+        if phone_number.startswith('8'):
+            input_form['client'] = phone_number.replace('8', '+7', 1)
+        date = input_form['date']
+        if date:
+            input_form['date'] = datetime.strptime(date, '%a, %d %b %Y %H:%M:%S %Z')
+        return input_form

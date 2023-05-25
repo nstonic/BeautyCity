@@ -70,9 +70,13 @@
           <h1 class="service__title">Запись на услугу</h1>
           <button class="service__btn btn">Запись по телефону</button>
         </div>
-
         <form action="#" class="service__form" method="post">
           {% csrf_token %}
+          {% if form.errors %}
+            {% for field, errors in form.errors.items %}
+              <div class="alert alert-danger" role="alert">{{ field }} - {{ errors }}</div>
+            {% endfor %}
+          {% endif %}
           <input name="phone_number" type="hidden">
           <div class="service__form_block service__salons">
             <div class="d-none">salon-input</div>
@@ -176,7 +180,7 @@
                             <input id="salon-input" type="hidden" name="salon">
                             <input id="master-input" type="hidden" name="master">
                             <input id="service-input" type="hidden" name="service">
-
+                            <input id="date-input" type="hidden" name="date">
                             <input type="text" name="client" class="contacts__form_iunput"
                                    placeholder="+7(999)999--99-99"
                                    required="">
