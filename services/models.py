@@ -4,7 +4,7 @@ from django.db import models
 class Service(models.Model):
     name = models.CharField(max_length=50, verbose_name='Service Name')
     price = models.IntegerField(verbose_name='Service Price')
-    photo = models.ImageField(blank=True, null=True)
+    photo = models.FileField(blank=True, null=True)
     description = models.TextField(max_length=300, blank=True, null=True)
 
     def __str__(self):
@@ -14,7 +14,7 @@ class Service(models.Model):
 class Salon(models.Model):
     name = models.CharField(max_length=50, verbose_name='Salon Name')
     address = models.CharField(max_length=100, verbose_name='Salon Address')
-    photo = models.ImageField(blank=True, null=True)
+    photo = models.FileField(blank=True, null=True)
     description = models.TextField(max_length=300, blank=True, null=True)
 
     def __str__(self):

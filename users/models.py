@@ -17,7 +17,7 @@ class Master(models.Model):
     service = models.ManyToManyField(Service, verbose_name='Master Services', related_name='masters')
     salon = models.ForeignKey(Salon, on_delete=models.SET_NULL, verbose_name='Master Salon', related_name='master', null=True)
     experience_from = models.DateField(null=True, blank=True)
-    portrait = models.ImageField(blank=True, null=True)
+    portrait = models.FileField(blank=True, null=True)
     description = models.TextField(max_length=300, blank=True, null=True)
     
 
