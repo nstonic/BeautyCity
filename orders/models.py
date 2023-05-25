@@ -12,5 +12,8 @@ class Order(models.Model):
     cost = models.IntegerField(verbose_name='Order Cost')
     comment = models.TextField(verbose_name='Order Comment', max_length=300, blank=True, null=True)
 
+    class Meta:
+        unique_together = ['salon', 'master', 'service', 'time']
+
     def __str__(self):
         return f'{self.master} - {self.service}, {self.time}'
