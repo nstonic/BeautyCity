@@ -35,8 +35,10 @@ class MakeOrder(TemplateView):
             order_form.save()
         else:
             context = self.get_context_data(**kwargs)
+
             context.update({
-                'form': order_form
+                'form': order_form,
+                'non_field_errors': order_form.non_field_errors
             })
             return render(
                 self.request,
