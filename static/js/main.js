@@ -149,11 +149,10 @@ $(document).ready(function() {
 		thisID = $(this).find('> .d-none').text()
     thisItemType = $(this).parent().parent().find('> .d-none').text()
     thisName = $(this).find('> .accordion__block_intro').text()
-		thisAddress = $(this).find('> .accordion__block_address').text()
     thisInput = document.getElementById(thisItemType)
 
     $(thisInput).val(thisID)
-		$(this).parent().parent().find('> button.active').addClass('selected').text(thisName + '  ' +thisAddress)
+		$(this).parent().parent().find('> button.active').addClass('selected').text(thisName)
 		setTimeout(() => {
 			$(this).parent().parent().find('> button.active').click()
 		}, 200)
@@ -185,11 +184,11 @@ $(document).ready(function() {
 	// }
 
 
-	$(document).on('click', '.service__masters .accordion__block', function(e) {
-		let clone = $(this).clone()
-		console.log(clone)
-		$(this).parent().parent().find('> button.active').html(clone)
-	})
+	// $(document).on('click', '.service__masters .accordion__block', function(e) {
+	// 	let clone = $(this).clone()
+	// 	console.log(clone)
+	// 	$(this).parent().parent().find('> button.active').html(clone)
+	// })
 
 	// $('.accordion__block_item').click(function(e) {
 	// 	const thisName = $(this).find('.accordion__block_item_intro').text()
@@ -246,6 +245,11 @@ $(document).ready(function() {
 		e.preventDefault()
 		$('.time__elems_btn').removeClass('active')
 		$(this).addClass('active')
+    let thisInput,thisTime
+
+    thisTime = $(this).text()
+    thisInput = document.getElementById('time-input')
+    $(thisInput).val(thisTime)
 		// $(this).hasClass('active') ? $(this).removeClass('active') : $(this).addClass('active')
 	})
 

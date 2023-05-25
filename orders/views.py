@@ -1,4 +1,4 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.utils.datetime_safe import datetime
 from django.views.generic import TemplateView
 
@@ -23,26 +23,38 @@ class MakeOrder(TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        cleaned_input_form = self._clean_input_order_form(
-            self.request.POST.copy()
+        input_form = self.get_input_form(
+            self.request.POST
         )
         Client.objects.get_or_create(
-            phone_number=cleaned_input_form.get('client'),
+            phone_number=input_form.get('client'),
             defaults={'name': 'Вася'}
         )
-        order_form = OrderForm(cleaned_input_form)
+        order_form = OrderForm(input_form)
         if order_form.is_valid():
             order_form.save()
         else:
-            print(order_form.errors)
+            context = self.get_context_data(**kwargs)
+            context.update({
+                'form': order_form
+            })
+            return render(
+                self.request,
+                self.template_name,
+                context,
+            )
         return redirect('configure_order')
 
     @staticmethod
-    def _clean_input_order_form(input_form):
-        phone_number = input_form.get('client')
+    def get_input_form(input_form):
+        form = input_form.copy()
+        phone_number = form.get('client', '')
         if phone_number.startswith('8'):
-            input_form['client'] = phone_number.replace('8', '+7', 1)
-        date = input_form['date']
-        if date:
-            input_form['date'] = datetime.strptime(date, '%a, %d %b %Y %H:%M:%S %Z')
-        return input_form
+            form['client'] = phone_number.replace('8', '+7', 1)
+        date_input = form.get('date')
+        time_input = form.get('time')
+        if date_input and time_input:
+            date = datetime.strptime(date_input, '%a, %d %b %Y %H:%M:%S %Z')
+            time = datetime.strptime(time_input, '%H:%M')
+            form['time'] = date.replace(hour=time.hour, minute=time.minute, second=0)
+        return form

@@ -73,9 +73,17 @@
         <form action="#" class="service__form" method="post">
           {% csrf_token %}
           {% if form.errors %}
-            {% for field, errors in form.errors.items %}
-              <div class="alert alert-danger" role="alert">{{ field }} - {{ errors }}</div>
-            {% endfor %}
+            <ul class="errorlist">
+              {% for field in form %}
+                {% if field.errors %}
+                  {% for error in field.errors %}
+                    <li class="list-group-item list-group-item-danger">
+                      {{ field.label }} - {{ error }}
+                    </li>
+                  {% endfor %}
+                {% endif %}
+              {% endfor %}
+            </ul>
           {% endif %}
           <input name="phone_number" type="hidden">
           <div class="service__form_block service__salons">
@@ -181,6 +189,7 @@
                             <input id="master-input" type="hidden" name="master">
                             <input id="service-input" type="hidden" name="service">
                             <input id="date-input" type="hidden" name="date">
+                            <input id="time-input" type="hidden" name="time">
                             <input type="text" name="client" class="contacts__form_iunput"
                                    placeholder="+7(999)999--99-99"
                                    required="">
