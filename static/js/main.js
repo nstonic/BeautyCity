@@ -144,13 +144,15 @@ $(document).ready(function() {
 
 
 	$(document).on('click', '.accordion__block', function(e) {
-		let thisName,thisAddress;
+		let thisName,thisAddress,thisID,thisItemType,thisInput;
 
-		thisName = $(this).find('> .accordion__block_intro').text()
+		thisID = $(this).find('> .d-none').text()
+    thisItemType = $(this).parent().parent().find('> .d-none').text()
+    thisName = $(this).find('> .accordion__block_intro').text()
 		thisAddress = $(this).find('> .accordion__block_address').text()
+    thisInput = document.getElementById(thisItemType)
 
-		// $("#js-salon").val(thisAddress)
-		$(this).parent().parent().find('> input').val(thisName)
+    $(thisInput).val(thisID)
 		$(this).parent().parent().find('> button.active').addClass('selected').text(thisName + '  ' +thisAddress)
 		setTimeout(() => {
 			$(this).parent().parent().find('> button.active').click()
