@@ -1,11 +1,10 @@
-from django.shortcuts import render
-
-# Create your views here.
-from django.views.generic import TemplateView
-from .models import Salon, Service
-from users.models import Master
-from django.utils.timezone import localdate
 from dateutil import relativedelta
+from django.utils.timezone import localdate
+from django.views.generic import TemplateView
+
+from users.models import Master
+
+from .models import Salon, Service
 
 
 class Index(TemplateView):
