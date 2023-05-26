@@ -250,7 +250,7 @@
           let thisInput,thisValue
           this.$cell.classList.add("-selected-"), this.selected = !0
           thisInput = document.getElementById("date-input")
-          thisValue = this.date.toUTCString()
+          thisValue = this.date.toDateString()
           thisInput.value = thisValue
         })), C(this, "removeSelect", (() => {
           this.$cell.classList.remove("-selected-", "-range-from-", "-range-to-"), this.selected = !1
