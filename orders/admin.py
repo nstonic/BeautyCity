@@ -13,4 +13,7 @@ class OrderAdmin(admin.ModelAdmin):
         'time',
         'cost',
     )
+    readonly_fields = [
+        'created_at'
+    ]
     list_filter = ['salon', 'master', 'service']
