@@ -16,6 +16,7 @@ def time_is_half_hour_interval(time):
 
 
 class Order(models.Model):
+    active = models.BooleanField(verbose_name='Order Is active')
     salon = models.ForeignKey(Salon, verbose_name='Order Salon', related_name='orders', on_delete=models.SET_NULL, null=True)
     client = models.ForeignKey(Client, verbose_name='Order Client', related_name='orders', on_delete=models.SET_NULL, null=True)
     master = models.ForeignKey(Master, verbose_name='Order Master', related_name='orders', on_delete=models.SET_NULL, null=True)
@@ -26,7 +27,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
 
     class Meta:
-        unique_together = ['master', 'time']
+        unique_together = ['master', 'time', 'active']
 
     def __str__(self):
         return f'{self.master} - {self.service}, {self.time}'
