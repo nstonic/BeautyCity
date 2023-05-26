@@ -167,46 +167,21 @@
         <div class="time__btns">
           <div class="row">
             <div class="col-md-12">
-              <button type="button" class="time__btns_next" data-bs-toggle="modal" data-bs-target="#phonenumberModal">
-                Далее
-              </button>
-              <div class="modal fade" id="phonenumberModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                   aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                  <div class="modal-content">
-                    <div class="modal-body">
-                      <div class="authPopup popup">
-                        <div class="popup__title authPopup__title">Войти по коду</div>
-                        <p class="popup__text authPopup__text">Введите свой номер телефона</p>
-                        <form id="order" action="#" class="authPopup__form" method="post">
-                          {% csrf_token %}
-                          <div class="contacts__form_inputBlock">
-                            <input id="salon-input" type="hidden" name="salon">
-                            {% if master %}
-                              <input id="master-input" type="hidden" name="master" value="{{ master.pk }}">
-                            {% else %}
-                              <input id="master-input" type="hidden" name="master">
-                            {% endif %}
-                            <input id="service-input" type="hidden" name="service">
-                            <input id="date-input" type="hidden" name="date">
-                            <input id="time-input" type="hidden" name="time">
-                            <input type="text" name="client" class="contacts__form_iunput"
-                                   placeholder="+7(999)999--99-99"
-                                   required="">
-                          </div>
-                          <div class="contacts__form_checkboxBlock fic">
-                            <input type="checkbox" class="contacts__form_checkbox" checked="">
-                            <span class="contacts__form_checkboxBlock__intro">Я согласен(а) с политикой конфидециоальности</span>
-                          </div>
-                          <button type="submit" class="popup__btn authPopup__btn">Отправить</button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <button class="time__btns_home" onclick="location.href='{% url 'index' %}'" type="button">На
-                главную
+              <form id="order" action="#" method="post">
+                {% csrf_token %}
+                <input id="salon-input" type="hidden" name="salon">
+                {% if master %}
+                  <input id="master-input" type="hidden" name="master" value="{{ master.pk }}">
+                {% else %}
+                  <input id="master-input" type="hidden" name="master">
+                {% endif %}
+                <input id="service-input" type="hidden" name="service">
+                <input id="date-input" type="hidden" name="date">
+                <input id="time-input" type="hidden" name="time">
+              </form>
+              <button form="order" type="submit" class="time__btns_next">Далее</button>
+              <button class="time__btns_home" onclick="location.href='{% url 'index' %}'" type="button">
+                На главную
               </button>
             </div>
           </div>

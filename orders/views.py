@@ -33,10 +33,6 @@ class MakeOrder(TemplateView):
         input_form = self.get_input_form(
             self.request.POST
         )
-        Client.objects.get_or_create(
-            phone_number=input_form.get('client'),
-            defaults={'name': 'Вася'}
-        )
         order_form = OrderForm(input_form)
         if order_form.is_valid():
             order = order_form.save()
@@ -57,9 +53,6 @@ class MakeOrder(TemplateView):
     @staticmethod
     def get_input_form(input_form):
         form = input_form.copy()
-        phone_number = form.get('client', '')
-        if phone_number.startswith('8'):
-            form['client'] = phone_number.replace('8', '+7', 1)
         date_input = form.get('date')
         time_input = form.get('time')
         if date_input and time_input:

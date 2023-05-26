@@ -7,12 +7,11 @@ from orders.models import Order
 class OrderForm(ModelForm):
     class Meta:
         model = Order
-        fields = ['salon', 'master', 'service', 'client', 'time', 'cost']
+        fields = ['salon', 'master', 'service', 'time', 'cost']
         labels = {
             'salon': 'Салон',
             'master': 'Мастер',
             'service': 'Услуга',
-            'client': 'Клиент',
             'time': 'Дата и время'
         }
         error_messages = {
