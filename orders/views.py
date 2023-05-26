@@ -45,6 +45,7 @@ class OrderFinally(TemplateView):
             order = get_object_or_404(Order, pk=order_id)
             order.client = client
             order.comment = comment
+            order.active = True
             order.save()
             return redirect('index')
 
