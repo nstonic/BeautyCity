@@ -7,12 +7,12 @@ from django.core.exceptions import ValidationError
 
 def time_not_past(time):
     if time < timezone.now():
-        raise ValidationError('Selected time is in the past')
+        raise ValidationError('Нельзя оформить запись на прошедшую дату и время')
 
 
 def time_is_half_hour_interval(time):
     if not time.minute in (0, 30):
-        raise ValidationError('Selected minute is not in half hour interval')
+        raise ValidationError('Недопустимое время. Запись производится диапазонами строго по 30 минут')
 
 
 class Order(models.Model):
