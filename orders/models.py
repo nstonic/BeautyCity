@@ -11,7 +11,7 @@ def time_not_past(time):
 
 
 def time_is_half_hour_interval(time):
-    if not time.minute in (0, 30):
+    if time.minute not in (0, 30) or not time.second == 0:
         raise ValidationError('Недопустимое время. Запись производится диапазонами строго по 30 минут')
 
 
