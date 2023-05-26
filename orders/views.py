@@ -1,5 +1,5 @@
-from django.shortcuts import redirect
-from django.utils.timezone import now
+from django.shortcuts import redirect, render
+from django.utils.datetime_safe import datetime
 from django.views.generic import TemplateView
 
 from orders.forms import OrderForm
@@ -8,38 +8,63 @@ from services.models import Salon, Service
 from users.models import Master, Client
 
 
+class OrderFinally(TemplateView):
+    template_name = 'serviceFinally.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        order_id = kwargs.get('order_id')
+        return context
+
+
 class MakeOrder(TemplateView):
     template_name = 'service.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        salons = Salon.objects.all()
-        services = Service.objects.all()
-        masters = Master.objects.all()
-
         context.update({
-            'masters': masters,
-            'salons': salons,
-            'services': services
+            'masters': Master.objects.all(),
+            'salons': Salon.objects.all(),
+            'services': Service.objects.all(),
+            'orders': Order.objects.all()
         })
+        if master_id := kwargs.get('master_id'):
+            context.update({
+                'master': Master.objects.filter(pk=master_id).first()
+            })
         return context
 
     def post(self, request, *args, **kwargs):
-        order_form = OrderForm(request.POST)
+        input_form = self.get_input_form(
+            self.request.POST
+        )
+        order_form = OrderForm(input_form)
         if order_form.is_valid():
-            master_name = request.POST.get('master')
-            salon_name = request.POST.get('salon')
-            service_name = request.POST.get('service')
-            master = Master.objects.get(name=master_name)
-            salon = Salon.objects.get(name=salon_name)
-            service = Service.objects.get(name=service_name)
-            client = Client.objects.get(pk='+12125552368')
-            Order.objects.create(
-                salon=salon,
-                master=master,
-                service=service,
-                client=client,
-                time=now(),
-                cost=service.price
+            order = order_form.save()
+            return redirect('final_order', order_id=order.pk)
+        else:
+            context = self.get_context_data(**kwargs)
+            context.update({
+                'form': order_form
+            })
+            return render(
+                self.request,
+                self.template_name,
+                context,
             )
-        return redirect('configure_order')
+
+    @staticmethod
+    def get_input_form(input_form):
+        form = input_form.copy()
+        date_input = form.get('date')
+        time_input = form.get('time')
+        if date_input and time_input:
+            date = datetime.strptime(date_input, '%a, %d %b %Y %H:%M:%S %Z')
+            time = datetime.strptime(time_input, '%H:%M')
+            form['time'] = date.replace(hour=time.hour, minute=time.minute, second=0)
+        if service_id := form.get('service'):
+            service = Service.objects.get(pk=service_id)
+            form['cost'] = service.price
+        else:
+            form['cost'] = 0
+        return form
