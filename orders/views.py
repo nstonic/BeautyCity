@@ -72,7 +72,9 @@ class MakeOrder(TemplateView):
         )
         order_form = OrderForm(input_form)
         if order_form.is_valid():
-            order = order_form.save()
+            order = order_form.save(commit=False)
+            order.active = False
+            order.save()
             return redirect('final_order', order_id=order.pk)
         else:
             context = self.get_context_data(**kwargs)
@@ -90,6 +92,7 @@ class MakeOrder(TemplateView):
         form = input_form.copy()
         date_input = form.get('date')
         time_input = form.get('time')
+        form['active'] = True
         if date_input and time_input:
             date = datetime.strptime(date_input, '%a, %d %b %Y %H:%M:%S %Z')
             time = datetime.strptime(time_input, '%H:%M')

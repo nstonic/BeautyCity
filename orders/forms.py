@@ -8,7 +8,7 @@ from users.models import Client
 class OrderForm(ModelForm):
     class Meta:
         model = Order
-        fields = ['salon', 'master', 'service', 'time', 'cost']
+        fields = ['salon', 'master', 'service', 'time', 'cost', 'active']
         labels = {
             'salon': 'Салон',
             'master': 'Мастер',
