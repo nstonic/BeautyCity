@@ -43,10 +43,8 @@ class MakeOrder(TemplateView):
             return redirect('final_order', order_id=order.pk)
         else:
             context = self.get_context_data(**kwargs)
-
             context.update({
-                'form': order_form,
-                'non_field_errors': order_form.non_field_errors
+                'form': order_form
             })
             return render(
                 self.request,
