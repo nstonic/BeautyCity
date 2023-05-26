@@ -67,7 +67,7 @@ class MakeOrder(TemplateView):
         time_input = form.get('time')
         form['active'] = True
         if date_input and time_input:
-            date = datetime.strptime(date_input, '%a, %d %b %Y %H:%M:%S %Z')
+            date = datetime.strptime(date_input, '%a %b %d %Y')
             time = datetime.strptime(time_input, '%H:%M')
             form['time'] = date.replace(
                 hour=time.hour, minute=time.minute, second=0)
