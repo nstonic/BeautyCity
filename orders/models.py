@@ -1,6 +1,18 @@
 from django.db import models
 from services.models import Service, Salon
 from users.models import Client, Master
+from django.utils import timezone
+from django.core.exceptions import ValidationError
+
+
+def time_not_past(time):
+    if time < timezone.now():
+        raise ValidationError('Selected time is in the past')
+
+
+def time_is_half_hour_interval(time):
+    if not time.minute in (0, 30):
+        raise ValidationError('Selected minute is not in half hour interval')
 
 
 class Order(models.Model):
@@ -8,7 +20,7 @@ class Order(models.Model):
     client = models.ForeignKey(Client, verbose_name='Order Client', related_name='orders', on_delete=models.SET_NULL, null=True)
     master = models.ForeignKey(Master, verbose_name='Order Master', related_name='orders', on_delete=models.SET_NULL, null=True)
     service = models.ForeignKey(Service, verbose_name='Order Service', related_name='orders', on_delete=models.SET_NULL, null=True)
-    time = models.DateTimeField(verbose_name='Order Time')
+    time = models.DateTimeField(verbose_name='Order Time', validators=[time_not_past, time_is_half_hour_interval])
     cost = models.IntegerField(verbose_name='Order Cost')
     comment = models.TextField(verbose_name='Order Comment', max_length=300, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
