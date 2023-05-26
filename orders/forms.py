@@ -2,6 +2,7 @@ from django.core.exceptions import NON_FIELD_ERRORS
 from django.forms import ModelForm
 
 from orders.models import Order
+from users.models import Client
 
 
 class OrderForm(ModelForm):
@@ -20,3 +21,12 @@ class OrderForm(ModelForm):
             }
         }
 
+
+class ClientForm(ModelForm):
+    class Meta:
+        model = Client
+        fields = ['name', 'phone_number']
+        labels = {
+            'name': 'Имя',
+            'phone_number': 'Номер телефона'
+        }

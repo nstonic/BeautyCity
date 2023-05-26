@@ -1,8 +1,9 @@
-from django.shortcuts import redirect, render
+import phonenumbers
+from django.shortcuts import redirect, render, get_object_or_404
 from django.utils.datetime_safe import datetime
 from django.views.generic import TemplateView
 
-from orders.forms import OrderForm
+from orders.forms import OrderForm, ClientForm
 from orders.models import Order
 from services.models import Salon, Service
 from users.models import Master, Client
@@ -14,7 +15,38 @@ class OrderFinally(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         order_id = kwargs.get('order_id')
+        order = Order.objects.filter(pk=order_id).first()
+        if order:
+            order_time = order.time.strftime('%H:%M')
+            order_date = order.time.strftime('%d %B')
+            context.update({
+                'order': order,
+                'order_time': order_time,
+                'order_date': order_date
+            })
         return context
+
+    def post(self, *args, **kwargs):
+        order_id = self.request.POST.get('order_id')
+        input_phone_number = self.request.POST.get('phone_number')
+        comment = self.request.POST.get('comment')
+        if input_phone_number.startswith('8'):
+            input_phone_number = input_phone_number.replace('8', '+7', 1)
+        phone_number = phonenumbers.parse(input_phone_number, 'ru')
+        if phonenumbers.is_valid_number(phone_number):
+            client_form = ClientForm(self.request.POST)
+            client = Client.objects.filter(pk=input_phone_number).first()
+            if not client:
+                if client_form.is_valid():
+                    client = client_form.save()
+                else:
+                    print(client_form.errors)
+                    return redirect('index')
+            order = get_object_or_404(Order, pk=order_id)
+            order.client = client
+            order.comment = comment
+            order.save()
+            return redirect('index')
 
 
 class MakeOrder(TemplateView):
