@@ -5,6 +5,8 @@ from .models import Order
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
+        'active',
         'created_at',
         'client',
         'salon',
@@ -14,6 +16,7 @@ class OrderAdmin(admin.ModelAdmin):
         'cost',
     )
     readonly_fields = [
+        'id',
         'created_at',
         'cost'
     ]
