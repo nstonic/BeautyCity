@@ -30,13 +30,13 @@ class OrderFinally(TemplateView):
         order_id = self.request.POST.get('order_id')
         input_phone_number = self.request.POST.get('phone_number')
         comment = self.request.POST.get('comment')
-        if input_phone_number.startswith('8'):
+        if input_phone_number and input_phone_number.startswith('8'):
             input_phone_number = input_phone_number.replace('8', '+7', 1)
         phone_number = phonenumbers.parse(input_phone_number, 'ru')
         if phonenumbers.is_valid_number(phone_number):
-            client_form = ClientForm(self.request.POST)
             client = Client.objects.filter(pk=input_phone_number).first()
             if not client:
+                client_form = ClientForm(self.request.POST)
                 if client_form.is_valid():
                     client = client_form.save()
                 else:
