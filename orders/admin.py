@@ -14,6 +14,13 @@ class OrderAdmin(admin.ModelAdmin):
         'cost',
     )
     readonly_fields = [
-        'created_at'
+        'created_at',
+        'cost'
     ]
     list_filter = ['salon', 'master', 'service']
+
+    def save_form(self, request, form, change):
+        instance = form.save(commit=False)
+        if not instance.cost:
+            instance.cost = instance.service.price
+        return form.save(commit=False)
