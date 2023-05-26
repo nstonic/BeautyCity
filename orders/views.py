@@ -8,8 +8,13 @@ from services.models import Salon, Service
 from users.models import Master, Client
 
 
-def order_final(request, order_id):
-    return render(request, 'serviceFinally.html')
+class OrderFinally(TemplateView):
+    template_name = 'serviceFinally.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        order_id = kwargs.get('order_id')
+        return context
 
 
 class MakeOrder(TemplateView):
@@ -39,10 +44,8 @@ class MakeOrder(TemplateView):
             return redirect('final_order', order_id=order.pk)
         else:
             context = self.get_context_data(**kwargs)
-
             context.update({
-                'form': order_form,
-                'non_field_errors': order_form.non_field_errors
+                'form': order_form
             })
             return render(
                 self.request,
