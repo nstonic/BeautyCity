@@ -14,6 +14,11 @@ class OrderFinally(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         order_id = kwargs.get('order_id')
+        order = Order.objects.select_related('salon')\
+            .select_related('service')\
+            .select_related('master')\
+            .get(id=order_id)
+        context['order'] = order
         return context
 
 
@@ -61,7 +66,8 @@ class MakeOrder(TemplateView):
         if date_input and time_input:
             date = datetime.strptime(date_input, '%a, %d %b %Y %H:%M:%S %Z')
             time = datetime.strptime(time_input, '%H:%M')
-            form['time'] = date.replace(hour=time.hour, minute=time.minute, second=0)
+            form['time'] = date.replace(
+                hour=time.hour, minute=time.minute, second=0)
         if service_id := form.get('service'):
             service = Service.objects.get(pk=service_id)
             form['cost'] = service.price
