@@ -12,8 +12,9 @@ class OrderFinally(TemplateView):
     template_name = 'serviceFinally.html'
 
     def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         order_id = kwargs.get('order_id')
-        return
+        return context
 
 
 class MakeOrder(TemplateView):
