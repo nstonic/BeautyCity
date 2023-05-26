@@ -66,6 +66,9 @@ class MakeOrder(TemplateView):
             date = datetime.strptime(date_input, '%a, %d %b %Y %H:%M:%S %Z')
             time = datetime.strptime(time_input, '%H:%M')
             form['time'] = date.replace(hour=time.hour, minute=time.minute, second=0)
-        service = Service.objects.get(pk=form.get('service'))
-        form['cost'] = service.price
+        if service_id := form.get('service'):
+            service = Service.objects.get(pk=service_id)
+            form['cost'] = service.price
+        else:
+            form['cost'] = 0
         return form
