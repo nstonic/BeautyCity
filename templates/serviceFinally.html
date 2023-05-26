@@ -75,8 +75,8 @@
                       <div class="accordion__block_master">{{ order.master.name }}</div>
                     </div>
                     <div class="serviceFinally__form_content__item fic">
-                      <div class="serviceFinally__form_content__time">16:30</div>
-                      <div class="serviceFinally__form_content__date">18 ноября</div>
+                      <div class="serviceFinally__form_content__time">{{ order.time|time:"H:i" }}</div>
+                      <div class="serviceFinally__form_content__date">{{ order.time|date:"d.m.Y" }}</div>
                     </div>
                   </div>
 
