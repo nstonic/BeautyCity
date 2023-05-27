@@ -6,6 +6,7 @@ from orders.forms import OrderForm
 from orders.models import Order
 from services.models import Salon, Service
 from users.models import Master, Client
+from users.forms import ClientForm
 
 
 class OrderFinally(TemplateView):
@@ -14,6 +15,68 @@ class OrderFinally(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         order_id = kwargs.get('order_id')
+        order = Order.objects.select_related('salon')\
+            .select_related('service')\
+            .select_related('master')\
+            .get(id=order_id)
+        context['order'] = order
+        return context
+
+    def post(self, request, *args, **kwargs):
+        input_form = self.request.POST
+        client_form = None
+        client = Client.objects.filter(
+            phone_number=input_form['phone_number']
+        ).first()
+        if not client:
+            client_form = ClientForm(input_form)
+        else:
+            if client.name != input_form['name']:
+                client_form = ClientForm(input_form, instance=client)
+
+        if client_form:
+            if client_form.is_valid():
+                client = client_form.save()
+            else:
+                kwargs['client_name'] = input_form['name']
+                kwargs['client_phone_number'] = input_form['phone_number']
+                kwargs['client_question'] = input_form['question']
+                context = self.get_context_data(**kwargs)
+                context.update(
+                    {
+                        'form': client_form,
+                        'client_name': input_form['name'],
+                        'client_phone_number': input_form['phone_number'],
+                        'client_question': input_form['question'],
+                    }
+                )
+                return render(
+                    self.request,
+                    self.template_name,
+                    context,
+                )
+
+        order_id = kwargs['order_id']
+        Order.objects.filter(id=order_id).update(
+            client=client,
+            active=True,
+            comment=input_form['question'],
+        )
+
+        return redirect('accepted_order', order_id=order_id)
+
+
+class AcceptedOrder(TemplateView):
+    template_name = 'accepted_order.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        order_id = kwargs.get('order_id')
+        order = Order.objects.select_related('salon')\
+            .select_related('service')\
+            .select_related('master')\
+            .get(id=order_id)
+        context['order'] = order
         return context
 
 
@@ -64,7 +127,8 @@ class MakeOrder(TemplateView):
         if date_input and time_input:
             date = datetime.strptime(date_input, '%a %b %d %Y')
             time = datetime.strptime(time_input, '%H:%M')
-            form['time'] = date.replace(hour=time.hour, minute=time.minute, second=0)
+            form['time'] = date.replace(
+                hour=time.hour, minute=time.minute, second=0)
         if service_id := form.get('service'):
             service = Service.objects.get(pk=service_id)
             form['cost'] = service.price

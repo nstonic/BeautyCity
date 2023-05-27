@@ -52,28 +52,8 @@
               <a href="{% url 'index' %}" class="breadCrumbs__item">На главную</a>
             </div>
             <div class="service__block">
-              <h1 class="service__title">Запись на услугу</h1>
+              <h1 class="service__title">Вы записаны!</h1>
             </div>
-            <form id="client-input" action="#" class="serviceFinally__form" method="post">
-              {% csrf_token %}
-              {% if form.errors %}
-                <ul class="errorlist">
-                  {% for error in form.non_field_errors %}
-                    <li class="list-group-item list-group-item-danger">
-                      {{ error }}
-                    </li>
-                  {% endfor %}
-                  {% for field in form %}
-                    {% if field.errors %}
-                      {% for error in field.errors %}
-                        <li class="list-group-item list-group-item-danger">
-                          {{ field.label }} - {{ error }}
-                        </li>
-                      {% endfor %}
-                    {% endif %}
-                  {% endfor %}
-                </ul>
-              {% endif %}
               <div class="serviceFinally__form_block">
                 <div class="serviceFinally__form_header fic">
                   <span class="serviceFinally__form_header__number">Запись №{{ order.id }}</span>
@@ -101,22 +81,6 @@
 
                 </div>
               </div>
-              <div class="serviceFinally__form_itesm">
-                <div class="contacts__form_block fic">
-                  <input id="name-input" type="text" name="name" class="contacts__form_iunput" placeholder="Введите имя" required="" value="{{ client_name }}">
-                </div>
-                <div class="contacts__form_inputBlock">
-                    <input id="phone-input" type="text" name="phone_number" class="contacts__form_iunput" placeholder="+7(999)999--99-99" required="" value="{{ client_phone_number }}">
-                </div>
-                <textarea id="question-input" name="question" class="contacts__form_textarea"
-                          placeholder="Вопрос(необязательно)">{{ client_question }}</textarea>
-                <div class="contacts__form_checkboxBlock fic">
-                  <input id="agreement-input" type="checkbox" name="agreement" class="contacts__form_checkbox" checked="" required="">
-                  <span class="contacts__form_checkboxBlock__intro">Я согласен(а) с политикой конфидециоальности</span>
-                </div>
-                <button type="submit" class="serviceFinallys__form_btn">Записаться</button>
-              </div>
-            </form>
           </div>
           <div class="col-md-12 col-lg-5">
             <img src="{% static 'img/bannerImg.svg' %}" alt="bannerImg" class="banner__img">
