@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Client, Master
+from .models import Client, Master, Review
 
 
 @admin.register(Client)
@@ -16,4 +16,14 @@ class MasterAdmin(admin.ModelAdmin):
         'name',
         'salon',
         'experience_from',
+    )
+
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = (
+        'master',
+        'client',
+        'rating',
+        'created_at'
     )
