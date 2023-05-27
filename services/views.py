@@ -2,7 +2,7 @@ from dateutil import relativedelta
 from django.utils.timezone import localdate
 from django.views.generic import TemplateView
 
-from users.models import Master
+from users.models import Master, Review
 
 from .models import Salon, Service
 
@@ -14,6 +14,7 @@ class Index(TemplateView):
         context = super().get_context_data(**kwargs)
         context['salons'] = Salon.objects.all()
         context['services'] = Service.objects.all()
+        context['reviews'] = Review.objects.all()
 
         masters = Master.objects.all()
         now = localdate()
