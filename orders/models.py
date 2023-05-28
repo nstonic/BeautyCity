@@ -16,15 +16,16 @@ def time_is_half_hour_interval(time):
 
 
 class Order(models.Model):
-    active = models.BooleanField(verbose_name='Order Is active')
-    salon = models.ForeignKey(Salon, verbose_name='Order Salon', related_name='orders', on_delete=models.SET_NULL, null=True)
-    client = models.ForeignKey(Client, verbose_name='Order Client', related_name='orders', on_delete=models.SET_NULL, null=True)
-    master = models.ForeignKey(Master, verbose_name='Order Master', related_name='orders', on_delete=models.SET_NULL, null=True)
-    service = models.ForeignKey(Service, verbose_name='Order Service', related_name='orders', on_delete=models.SET_NULL, null=True)
-    time = models.DateTimeField(verbose_name='Order Time', validators=[time_not_past, time_is_half_hour_interval])
-    cost = models.IntegerField(verbose_name='Order Cost')
-    comment = models.TextField(verbose_name='Order Comment', max_length=300, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+    active = models.BooleanField(verbose_name='Активен')
+    salon = models.ForeignKey(Salon, verbose_name='Салон', related_name='orders', on_delete=models.SET_NULL, null=True)
+    client = models.ForeignKey(Client, verbose_name='Клиент', related_name='orders', on_delete=models.SET_NULL, null=True)
+    master = models.ForeignKey(Master, verbose_name='Мастер', related_name='orders', on_delete=models.SET_NULL, null=True)
+    service = models.ForeignKey(Service, verbose_name='Услуга', related_name='orders', on_delete=models.SET_NULL, null=True)
+    time = models.DateTimeField(verbose_name='Время записи', validators=[time_not_past, time_is_half_hour_interval])
+    cost = models.IntegerField(verbose_name='Стоимость')
+    comment = models.TextField(verbose_name='Комментарий', max_length=300, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='Создан')
+    is_paid = models.BooleanField(default=False, verbose_name='Оплачен')
 
     class Meta:
         unique_together = ['master', 'time', 'active']

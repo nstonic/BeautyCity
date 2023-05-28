@@ -52,7 +52,11 @@
               <a href="{% url 'index' %}" class="breadCrumbs__item">На главную</a>
             </div>
             <div class="service__block">
-              <h1 class="service__title">Оплачено!</h1>
+              {% if order.is_paid %}
+                <h1 class="service__title">Оплачено!</h1>
+              {% else %}
+                <h1 class="service__title">Не оплачено!</h1>
+              {% endif %}
             </div>
             <div class="serviceFinally__form_block">
               <div class="serviceFinally__form_header fic">
@@ -81,7 +85,13 @@
 
               </div>
             </div>
-            <button type="button" class="serviceFinallys__form_btn" onclick="location.href='{% url 'pay' order_id=order.id%}'">Оплатить</button>
+            {% if order.is_paid %}
+            {% else %}
+              <button type="button" class="serviceFinallys__form_btn"
+                      onclick="location.href='{% url 'pay' order_id=order.id %}'">Оплатить
+              </button>
+            {% endif %}
+
           </div>
           <div class="col-md-12 col-lg-5">
             <img src="{% static 'img/bannerImg.svg' %}" alt="bannerImg" class="banner__img">

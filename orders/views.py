@@ -167,7 +167,10 @@ def create_checkout_session(client, order):
         metadata={'client_id': client.pk, 'order_id': order.pk},
         success_url=settings.DOMAIN +
                     reverse('paid_order', kwargs={'order_id': order.pk}) +
-                    '?session_id={CHECKOUT_SESSION_ID}'
+                    '?session_id={CHECKOUT_SESSION_ID}',
+        cancel_url=settings.DOMAIN +
+                   reverse('paid_order', kwargs={'order_id': order.pk}) +
+                   '?session_id={CHECKOUT_SESSION_ID}'
     )
     return redirect(checkout_session.url, code=303)
 
@@ -183,7 +186,8 @@ class PaidOrder(TemplateView):
             .select_related('master') \
             .get(id=order_id)
         session = stripe.checkout.Session.retrieve(self.request.GET.get('session_id'))
-        print(session.payment_status)
-
+        if session.payment_status == 'paid':
+            order = get_object_or_404(Order, pk=order_id)
+            order.is_paid = True
         context['order'] = order
         return context
