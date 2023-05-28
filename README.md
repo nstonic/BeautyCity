@@ -26,14 +26,24 @@ pip install -r requirements.txt
   - `ALLOWED_HOSTS` is a list of strings representing the host/domain names that this Django site can serve (obligatory when `DEBUG` is set to `False`);
   - `SECRET_KEY` is a secret key for this installation (obligatory); this key is used to provide cryptographic signing, and should be set to a unique, unpredictable value;
   - `TIME_ZONE` is a string representing the time zone for this installation (optional, `Europe/Moscow` by default);
+  - `DOMAIN` is a URL for this installation (obligatory);
+  - `STRIPE_PUBLIC_KEY` is a public key that is necessary for the [Stripe payment system](https://stripe.com/docs) (obligatory);
+  - `STRIPE_SECRET_KEY` is a secret key that is necessary for the [Stripe payment system](https://stripe.com/docs) (obligatory);
+  - `STRIPE_WEBHOOK_SECRET` is a webhook secret that is necessary for the [Stripe payment system](https://stripe.com/docs) (obligatory);
+  - `BOX_STRIPE_ID` is a box ID that is necessary for the [Stripe payment system](https://stripe.com/docs) (obligatory);
 
 To set up variables in .env file, create it in the root directory of the project and fill it up like this:
 
 ```bash
 DEBUG=True
-SECRET_KEY=REPLACE_ME
+SECRET_KEY=replace_me
 ALLOWED_HOSTS=localhost,127.0.0.1
 TIME_ZONE=Canada/Central
+DOMAIN=https://example.com
+STRIPE_PUBLIC_KEY=replace_me
+STRIPE_SECRET_KEY=replace_me
+STRIPE_WEBHOOK_SECRET=replace_me
+BOX_STRIPE_ID=replace_me
 ```
 
 - Create SQLite database:
