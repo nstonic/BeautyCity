@@ -165,7 +165,25 @@ def create_checkout_session(client, order):
         ],
         mode='payment',
         metadata={'client_id': client.pk, 'order_id': order.pk},
-        success_url=settings.DOMAIN + reverse('index'),
+        success_url=settings.DOMAIN +
+                    reverse('paid_order', kwargs={'order_id': order.pk}) +
+                    '?session_id={CHECKOUT_SESSION_ID}'
     )
-
     return redirect(checkout_session.url, code=303)
+
+
+class PaidOrder(TemplateView):
+    template_name = 'paid.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        order_id = kwargs.get('order_id')
+        order = Order.objects.select_related('salon') \
+            .select_related('service') \
+            .select_related('master') \
+            .get(id=order_id)
+        session = stripe.checkout.Session.retrieve(self.request.GET.get('session_id'))
+        print(session.payment_status)
+
+        context['order'] = order
+        return context
