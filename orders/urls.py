@@ -1,6 +1,6 @@
 from django.urls import path
 
-from orders.views import MakeOrder, OrderFinally, AcceptedOrder
+from orders.views import MakeOrder, OrderFinally, AcceptedOrder, payment
 
 urlpatterns = [
     path('configure/', MakeOrder.as_view(), name='configure_order'),
@@ -15,4 +15,6 @@ urlpatterns = [
         AcceptedOrder.as_view(),
         name='accepted_order'
     ),
+    path('pay/<int:order_id>', payment, name='pay')
+
 ]

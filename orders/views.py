@@ -1,4 +1,7 @@
-from django.shortcuts import redirect, render
+import stripe
+from django.conf import settings
+from django.shortcuts import redirect, render, get_object_or_404
+from django.urls import reverse
 from django.utils.datetime_safe import datetime
 from django.views.generic import TemplateView
 
@@ -15,9 +18,9 @@ class OrderFinally(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         order_id = kwargs.get('order_id')
-        order = Order.objects.select_related('salon')\
-            .select_related('service')\
-            .select_related('master')\
+        order = Order.objects.select_related('salon') \
+            .select_related('service') \
+            .select_related('master') \
             .get(id=order_id)
         context['order'] = order
         return context
@@ -72,9 +75,9 @@ class AcceptedOrder(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         order_id = kwargs.get('order_id')
-        order = Order.objects.select_related('salon')\
-            .select_related('service')\
-            .select_related('master')\
+        order = Order.objects.select_related('salon') \
+            .select_related('service') \
+            .select_related('master') \
             .get(id=order_id)
         context['order'] = order
         return context
@@ -135,3 +138,35 @@ class MakeOrder(TemplateView):
         else:
             form['cost'] = 0
         return form
+
+
+def payment(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    client = order.client
+    if not client:
+        return redirect('index')
+    return create_checkout_session(client, order)
+
+
+def create_checkout_session(client, order):
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    response = stripe.Price.create(
+        unit_amount=order.cost,
+        product=settings.BOX_STRIPE_ID,
+        currency='rub'
+    )
+    price_id = response['id']
+    print(response)
+    checkout_session = stripe.checkout.Session.create(
+        line_items=[
+            {
+                'price': price_id,
+                'quantity': 1,
+            },
+        ],
+        mode='payment',
+        metadata={'client_id': client.pk, 'order_id': order.pk},
+        success_url=reverse('index'),
+    )
+
+    return redirect(checkout_session.url, code=303)

@@ -54,33 +54,34 @@
             <div class="service__block">
               <h1 class="service__title">Вы записаны!</h1>
             </div>
-              <div class="serviceFinally__form_block">
-                <div class="serviceFinally__form_header fic">
-                  <span class="serviceFinally__form_header__number">Запись №{{ order.id }}</span>
-                  <div class="serviceFinally__form_header__item fic">
-                    <div class="serviceFinally__form_header__service">{{ order.salon.name }}</div>
-                    <div class="serviceFinally__form_header__address">{{ order.salon.address }}</div>
-                  </div>
-                </div>
-                <div class="serviceFinally__form_content">
-                  <div class="serviceFinally__form_content__block fic">
-                    <div class="serviceFinally__form_content__title"> {{ order.service.name }}</div>
-                    <div class="serviceFinally__form_content__price">{{ order.cost }} ₽</div>
-                  </div>
-                  <div class="serviceFinally__form_content__block fic">
-                    <div class="serviceFinally__form_content__items fic">
-                      <img src="{% static 'img/masters/avatar/vizajist1.svg' %}" alt="avatar"
-                           class="accordion__block_img">
-                      <div class="accordion__block_master">{{ order.master.name }}</div>
-                    </div>
-                    <div class="serviceFinally__form_content__item fic">
-                      <div class="serviceFinally__form_content__time">{{ order.time|time:"H:i" }}</div>
-                      <div class="serviceFinally__form_content__date">{{ order.time|date:"d.m.Y" }}</div>
-                    </div>
-                  </div>
-
+            <div class="serviceFinally__form_block">
+              <div class="serviceFinally__form_header fic">
+                <span class="serviceFinally__form_header__number">Запись №{{ order.id }}</span>
+                <div class="serviceFinally__form_header__item fic">
+                  <div class="serviceFinally__form_header__service">{{ order.salon.name }}</div>
+                  <div class="serviceFinally__form_header__address">{{ order.salon.address }}</div>
                 </div>
               </div>
+              <div class="serviceFinally__form_content">
+                <div class="serviceFinally__form_content__block fic">
+                  <div class="serviceFinally__form_content__title"> {{ order.service.name }}</div>
+                  <div class="serviceFinally__form_content__price">{{ order.cost }} ₽</div>
+                </div>
+                <div class="serviceFinally__form_content__block fic">
+                  <div class="serviceFinally__form_content__items fic">
+                    <img src="{% static 'img/masters/avatar/vizajist1.svg' %}" alt="avatar"
+                         class="accordion__block_img">
+                    <div class="accordion__block_master">{{ order.master.name }}</div>
+                  </div>
+                  <div class="serviceFinally__form_content__item fic">
+                    <div class="serviceFinally__form_content__time">{{ order.time|time:"H:i" }}</div>
+                    <div class="serviceFinally__form_content__date">{{ order.time|date:"d.m.Y" }}</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <button type="button" class="serviceFinallys__form_btn" onclick="location.href='{% url 'pay' order_id=order.id%}'">Записаться</button>
           </div>
           <div class="col-md-12 col-lg-5">
             <img src="{% static 'img/bannerImg.svg' %}" alt="bannerImg" class="banner__img">
