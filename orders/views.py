@@ -189,5 +189,6 @@ class PaidOrder(TemplateView):
         if session.payment_status == 'paid':
             order = get_object_or_404(Order, pk=order_id)
             order.is_paid = True
+            order.save()
         context['order'] = order
         return context
