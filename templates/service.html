@@ -80,7 +80,11 @@
           <input name="phone_number" type="hidden">
           <div class="service__form_block service__salons">
             <div class="d-none">salon-input</div>
-            <button class="accordion">(Выберите салон)</button>
+            {% if current_salon %}
+              <button class="accordion selected">{{ current_salon.name }}</button>
+            {% else %}
+              <button class="accordion">(Выберите салон)</button>
+            {% endif %}
             <div class="panel">
               {% for salon in salons %}
                 <div class="accordion__block fic">
@@ -93,7 +97,11 @@
           </div>
           <div class="service__form_block service__services">
             <div class="d-none">service-input</div>
-            <button class="accordion">(Выберите услугу)</button>
+            {% if current_service %}
+              <button class="accordion selected">{{ current_service.name }}</button>
+            {% else %}
+              <button class="accordion">(Выберите услугу)</button>
+            {% endif %}
             <div class="panel">
               {% for service in services %}
                 <div class="accordion__block fic">
@@ -106,8 +114,8 @@
           </div>
           <div class="service__form_block service__masters">
             <div class="d-none">master-input</div>
-            {% if master %}
-              <button class="accordion selected">{{ master.name }}</button>
+            {% if current_master %}
+              <button class="accordion selected">{{ current_master.name }}</button>
             {% else %}
               <button class="accordion">(Выберите мастера)</button>
             {% endif %}
@@ -169,13 +177,23 @@
             <div class="col-md-12">
               <form id="order" action="#" method="post">
                 {% csrf_token %}
-                <input id="salon-input" type="hidden" name="salon">
-                {% if master %}
-                  <input id="master-input" type="hidden" name="master" value="{{ master.pk }}">
+
+                {% if current_salon %}
+                  <input id="salon-input" type="hidden" name="salon" value="{{ current_salon.pk }}">
+                {% else %}
+                  <input id="salon-input" type="hidden" name="salon">
+                {% endif %}
+                {% if current_master %}
+                  <input id="master-input" type="hidden" name="master" value="{{ current_master.pk }}">
                 {% else %}
                   <input id="master-input" type="hidden" name="master">
                 {% endif %}
-                <input id="service-input" type="hidden" name="service">
+                {% if current_service %}
+                  <input id="service-input" type="hidden" name="service" value="{{ current_service.pk }}">
+                {% else %}
+                  <input id="service-input" type="hidden" name="service">
+                {% endif %}
+
                 <input id="date-input" type="hidden" name="date">
                 <input id="time-input" type="hidden" name="time">
               </form>

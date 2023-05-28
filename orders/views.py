@@ -1,3 +1,5 @@
+from pprint import pprint
+
 import stripe
 from django.conf import settings
 from django.shortcuts import redirect, render, get_object_or_404
@@ -82,12 +84,13 @@ class MakeOrder(TemplateView):
         context.update({
             'masters': Master.objects.all(),
             'salons': Salon.objects.all(),
-            'services': Service.objects.all(),
-            'orders': Order.objects.all()
+            'services': Service.objects.all()
         })
         if master_id := kwargs.get('master_id'):
             context.update({
-                'master': Master.objects.filter(pk=master_id).first()
+                'current_master': Master.objects.filter(
+                    pk=master_id
+                ).first()
             })
         return context
 
@@ -101,9 +104,13 @@ class MakeOrder(TemplateView):
             return redirect('order', order_id=order.pk)
         else:
             context = self.get_context_data(**kwargs)
-            context.update({
-                'form': order_form
-            })
+            context['form'] = order_form
+            if service := order_form.cleaned_data.get('service'):
+                context['current_service'] = service
+            if master := order_form.cleaned_data.get('master'):
+                context['current_master'] = master
+            if salon := order_form.cleaned_data.get('salon'):
+                context['current_salon'] = salon
             return render(
                 self.request,
                 self.template_name,
@@ -119,9 +126,12 @@ class MakeOrder(TemplateView):
             date = datetime.strptime(date_input, '%a %b %d %Y')
             time = datetime.strptime(time_input, '%H:%M')
             form['time'] = date.replace(
-                hour=time.hour, minute=time.minute, second=0)
+                hour=time.hour,
+                minute=time.minute,
+                second=0
+            )
         if service_id := form.get('service'):
-            service = Service.objects.get(pk=service_id)
+            service = get_object_or_404(Service, pk=service_id)
             form['cost'] = service.price
         else:
             form['cost'] = 0
@@ -133,10 +143,6 @@ def payment(request, order_id):
     client = order.client
     if not client:
         return redirect('index')
-    return create_checkout_session(client, order)
-
-
-def create_checkout_session(client, order):
     stripe.api_key = settings.STRIPE_SECRET_KEY
     response = stripe.Price.create(
         unit_amount=order.cost * 100,
