@@ -52,7 +52,11 @@
               <a href="{% url 'index' %}" class="breadCrumbs__item">На главную</a>
             </div>
             <div class="service__block">
-              <h1 class="service__title">Запись на услугу</h1>
+              {% if order.client %}
+                <h1 class="service__title">Запись оформлена</h1>
+              {% else %}
+                <h1 class="service__title">Запись на услугу</h1>
+              {% endif %}
             </div>
             <form id="client-input" action="#" class="serviceFinally__form" method="post">
               {% csrf_token %}
@@ -101,21 +105,35 @@
 
                 </div>
               </div>
-              <div class="serviceFinally__form_itesm">
-                <div class="contacts__form_block fic">
-                  <input id="name-input" type="text" name="name" class="contacts__form_iunput" placeholder="Введите имя" required="" value="{{ client_name }}">
+              {% if not order.client %}
+                <div class="serviceFinally__form_itesm">
+                  <div class="contacts__form_block fic">
+                    <input id="name-input" type="text" name="name" class="contacts__form_iunput"
+                           placeholder="Введите имя" required="" value="{{ client_name }}">
+                  </div>
+                  <div class="contacts__form_inputBlock">
+                    <input id="phone-input" type="text" name="phone_number" class="contacts__form_iunput"
+                           placeholder="+7(999)999--99-99" required="" value="{{ client_phone_number }}">
+                  </div>
+                  <textarea id="question-input" name="question" class="contacts__form_textarea"
+                            placeholder="Вопрос(необязательно)">{{ client_question }}</textarea>
+                  <div class="contacts__form_checkboxBlock fic">
+                    <input id="agreement-input" type="checkbox" name="agreement" class="contacts__form_checkbox"
+                           checked="" required="">
+                    <span
+                      class="contacts__form_checkboxBlock__intro">Я согласен(а) с политикой конфидециоальности</span>
+                  </div>
+                  <button type="submit" class="serviceFinallys__form_btn">Записаться</button>
                 </div>
-                <div class="contacts__form_inputBlock">
-                    <input id="phone-input" type="text" name="phone_number" class="contacts__form_iunput" placeholder="+7(999)999--99-99" required="" value="{{ client_phone_number }}">
-                </div>
-                <textarea id="question-input" name="question" class="contacts__form_textarea"
-                          placeholder="Вопрос(необязательно)">{{ client_question }}</textarea>
-                <div class="contacts__form_checkboxBlock fic">
-                  <input id="agreement-input" type="checkbox" name="agreement" class="contacts__form_checkbox" checked="" required="">
-                  <span class="contacts__form_checkboxBlock__intro">Я согласен(а) с политикой конфидециоальности</span>
-                </div>
-                <button type="submit" class="serviceFinallys__form_btn">Записаться</button>
-              </div>
+              {% else %}
+                {% if not order.is_paid %}
+                  <button type="button" class="serviceFinallys__form_btn"
+                          onclick="location.href='{% url 'pay' order_id=order.id %}'">Оплатить
+                  </button>
+                {% else %}
+                  <div class="serviceFinally__form_content__price">Заказ оплачен</div>
+                {% endif %}
+              {% endif %}
             </form>
           </div>
           <div class="col-md-12 col-lg-5">

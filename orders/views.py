@@ -12,7 +12,7 @@ from users.models import Master, Client
 from users.forms import ClientForm
 
 
-class OrderFinally(TemplateView):
+class OrderDetails(TemplateView):
     template_name = 'serviceFinally.html'
 
     def get_context_data(self, **kwargs):
@@ -22,6 +22,11 @@ class OrderFinally(TemplateView):
             .select_related('service') \
             .select_related('master') \
             .get(id=order_id)
+        if stripe_session_id := self.request.GET.get('stripe_session_id'):
+            stripe_session = stripe.checkout.Session.retrieve(stripe_session_id)
+            if stripe_session.payment_status == 'paid':
+                order.is_paid = True
+                order.save()
         context['order'] = order
         return context
 
@@ -66,21 +71,7 @@ class OrderFinally(TemplateView):
             comment=input_form['question'],
         )
 
-        return redirect('accepted_order', order_id=order_id)
-
-
-class AcceptedOrder(TemplateView):
-    template_name = 'accepted_order.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        order_id = kwargs.get('order_id')
-        order = Order.objects.select_related('salon') \
-            .select_related('service') \
-            .select_related('master') \
-            .get(id=order_id)
-        context['order'] = order
-        return context
+        return redirect('order', order_id=order_id)
 
 
 class MakeOrder(TemplateView):
@@ -101,15 +92,13 @@ class MakeOrder(TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        input_form = self.get_input_form(
-            self.request.POST
-        )
+        input_form = self.get_input_form()
         order_form = OrderForm(input_form)
         if order_form.is_valid():
             order = order_form.save(commit=False)
             order.active = False
             order.save()
-            return redirect('final_order', order_id=order.pk)
+            return redirect('order', order_id=order.pk)
         else:
             context = self.get_context_data(**kwargs)
             context.update({
@@ -121,9 +110,8 @@ class MakeOrder(TemplateView):
                 context,
             )
 
-    @staticmethod
-    def get_input_form(input_form):
-        form = input_form.copy()
+    def get_input_form(self):
+        form = self.request.POST.copy()
         date_input = form.get('date')
         time_input = form.get('time')
         form['active'] = True
@@ -166,29 +154,10 @@ def create_checkout_session(client, order):
         mode='payment',
         metadata={'client_id': client.pk, 'order_id': order.pk},
         success_url=settings.DOMAIN +
-                    reverse('paid_order', kwargs={'order_id': order.pk}) +
-                    '?session_id={CHECKOUT_SESSION_ID}',
+                    reverse('order', kwargs={'order_id': order.pk}) +
+                    '?stripe_session_id={CHECKOUT_SESSION_ID}',
         cancel_url=settings.DOMAIN +
-                   reverse('paid_order', kwargs={'order_id': order.pk}) +
-                   '?session_id={CHECKOUT_SESSION_ID}'
+                   reverse('order', kwargs={'order_id': order.pk}) +
+                   '?stripe_session_id={CHECKOUT_SESSION_ID}'
     )
     return redirect(checkout_session.url, code=303)
-
-
-class PaidOrder(TemplateView):
-    template_name = 'accepted_order.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        order_id = kwargs.get('order_id')
-        order = Order.objects.select_related('salon') \
-            .select_related('service') \
-            .select_related('master') \
-            .get(id=order_id)
-        if session_id := self.request.GET.get('session_id'):
-            session = stripe.checkout.Session.retrieve(session_id)
-            if session.payment_status == 'paid':
-                order.is_paid = True
-                order.save()
-        context['order'] = order
-        return context

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from orders.views import MakeOrder, OrderFinally, AcceptedOrder, payment, PaidOrder
+from orders.views import MakeOrder, OrderDetails,  payment
 
 urlpatterns = [
     path(
@@ -14,19 +14,9 @@ urlpatterns = [
         name='master_order'
     ),
     path(
-        'final/<int:order_id>/',
-        OrderFinally.as_view(),
-        name='final_order'
-    ),
-    path(
-        'accepted_order/<int:order_id>/',
-        AcceptedOrder.as_view(),
-        name='accepted_order'
-    ),
-    path(
-        'paid/<int:order_id>/',
-        PaidOrder.as_view(),
-        name='paid_order'
+        '<int:order_id>/',
+        OrderDetails.as_view(),
+        name='order'
     ),
     path(
         'pay/<int:order_id>/',
