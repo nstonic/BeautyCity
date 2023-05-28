@@ -17,6 +17,7 @@ def time_is_half_hour_interval(time):
 
 class Order(models.Model):
     active = models.BooleanField(verbose_name='Активен')
+    is_paid = models.BooleanField(default=False, verbose_name='Оплачен')
     salon = models.ForeignKey(Salon, verbose_name='Салон', related_name='orders', on_delete=models.SET_NULL, null=True)
     client = models.ForeignKey(Client, verbose_name='Клиент', related_name='orders', on_delete=models.SET_NULL, null=True)
     master = models.ForeignKey(Master, verbose_name='Мастер', related_name='orders', on_delete=models.SET_NULL, null=True)
@@ -25,7 +26,7 @@ class Order(models.Model):
     cost = models.IntegerField(verbose_name='Стоимость')
     comment = models.TextField(verbose_name='Комментарий', max_length=300, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='Создан')
-    is_paid = models.BooleanField(default=False, verbose_name='Оплачен')
+
 
     class Meta:
         unique_together = ['master', 'time', 'active']
