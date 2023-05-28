@@ -1374,7 +1374,8 @@ footer {
 }
 
 .serviceFinally .service__block {
-  margin-bottom: 39px;
+  margin-top: 39px;
+  margin-bottom: 15px;
 }
 
 .serviceFinally__form_block {
