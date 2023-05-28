@@ -1,10 +1,22 @@
 from dateutil import relativedelta
+from django.shortcuts import render
 from django.utils.timezone import localdate
 from django.views.generic import TemplateView
 
 from users.models import Master, Review
 
 from .models import Salon, Service
+
+
+def contacts(request):
+    context = {
+        'salons': Salon.objects.all()
+    }
+    return render(
+        request,
+        'contacts.html',
+        context
+    )
 
 
 class Index(TemplateView):

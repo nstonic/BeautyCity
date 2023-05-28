@@ -26,7 +26,7 @@
   {% block head %}
   {% endblock %}
 </head>
-<body{% block body %}{% endblock %}>
+<body>
 {% block mobMenu %}
 {% endblock %}
 <header id="header">
@@ -47,7 +47,7 @@
               <li class="menu__item"><a href="#" class="menu__item_link">Мастера</a></li>
               <li class="menu__item"><a href="#" class="menu__item_link">Услуги</a></li>
               <li class="menu__item"><a href="#" class="menu__item_link">Отзывы</a></li>
-              <li class="menu__item"><a href="#" class="menu__item_link">Контакты</a></li>
+              <li class="menu__item"><a href="{% url 'contacts' %}" class="menu__item_link">Контакты</a></li>
             </ul>
           </nav>
         </div>
@@ -82,7 +82,7 @@
                 <li class="menu__item"><a href="#" class="menu__item_link">Мастера</a></li>
                 <li class="menu__item"><a href="#" class="menu__item_link">Услуги</a></li>
                 <li class="menu__item"><a href="#" class="menu__item_link">Отзывы</a></li>
-                <li class="menu__item"><a href="#" class="menu__item_link">Контакты</a></li>
+                <li class="menu__item"><a href="{% url 'contacts' %}" class="menu__item_link">Контакты</a></li>
               </ul>
             </nav>
           </div>
