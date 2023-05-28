@@ -151,12 +151,11 @@ def payment(request, order_id):
 def create_checkout_session(client, order):
     stripe.api_key = settings.STRIPE_SECRET_KEY
     response = stripe.Price.create(
-        unit_amount=order.cost,
+        unit_amount=order.cost*100,
         product=settings.BOX_STRIPE_ID,
         currency='rub'
     )
     price_id = response['id']
-    print(response)
     checkout_session = stripe.checkout.Session.create(
         line_items=[
             {
