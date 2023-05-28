@@ -185,10 +185,10 @@ class PaidOrder(TemplateView):
             .select_related('service') \
             .select_related('master') \
             .get(id=order_id)
-        session = stripe.checkout.Session.retrieve(self.request.GET.get('session_id'))
-        if session.payment_status == 'paid':
-            order = get_object_or_404(Order, pk=order_id)
-            order.is_paid = True
-            order.save()
+        if session_id := self.request.GET.get('session_id'):
+            session = stripe.checkout.Session.retrieve(session_id)
+            if session.payment_status == 'paid':
+                order.is_paid = True
+                order.save()
         context['order'] = order
         return context
