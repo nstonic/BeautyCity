@@ -24,12 +24,12 @@ urlpatterns = [
         name='accepted_order'
     ),
     path(
-        'paid/<int:order_id>',
+        'paid/<int:order_id>/',
         PaidOrder.as_view(),
         name='paid_order'
     ),
     path(
-        'pay/<int:order_id>',
+        'pay/<int:order_id>/',
         payment,
         name='pay'
     )

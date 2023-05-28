@@ -81,7 +81,13 @@
 
               </div>
             </div>
-            <button type="button" class="serviceFinallys__form_btn" onclick="location.href='{% url 'pay' order_id=order.id%}'">Оплатить</button>
+            {% if not order.is_paid %}
+              <button type="button" class="serviceFinallys__form_btn"
+                      onclick="location.href='{% url 'pay' order_id=order.id %}'">Оплатить
+              </button>
+            {% else %}
+              <div class="serviceFinally__form_content__price">Заказ оплачен</div>
+            {% endif %}
           </div>
           <div class="col-md-12 col-lg-5">
             <img src="{% static 'img/bannerImg.svg' %}" alt="bannerImg" class="banner__img">
