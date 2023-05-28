@@ -151,7 +151,7 @@ def payment(request, order_id):
 def create_checkout_session(client, order):
     stripe.api_key = settings.STRIPE_SECRET_KEY
     response = stripe.Price.create(
-        unit_amount=order.cost*100,
+        unit_amount=order.cost * 100,
         product=settings.BOX_STRIPE_ID,
         currency='rub'
     )
@@ -165,7 +165,7 @@ def create_checkout_session(client, order):
         ],
         mode='payment',
         metadata={'client_id': client.pk, 'order_id': order.pk},
-        success_url=reverse('index'),
+        success_url=settings.DOMAIN + reverse('index'),
     )
 
     return redirect(checkout_session.url, code=303)
