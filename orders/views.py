@@ -1,8 +1,6 @@
-from pprint import pprint
-
 import stripe
 from django.conf import settings
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.datetime_safe import datetime
 from django.views.generic import TemplateView
@@ -10,8 +8,8 @@ from django.views.generic import TemplateView
 from orders.forms import OrderForm
 from orders.models import Order
 from services.models import Salon, Service
-from users.models import Master, Client
 from users.forms import ClientForm
+from users.models import Client, Master
 
 
 class OrderDetails(TemplateView):
@@ -25,7 +23,8 @@ class OrderDetails(TemplateView):
             .select_related('master') \
             .get(id=order_id)
         if stripe_session_id := self.request.GET.get('stripe_session_id'):
-            stripe_session = stripe.checkout.Session.retrieve(stripe_session_id)
+            stripe_session = stripe.checkout.Session.retrieve(
+                stripe_session_id)
             if stripe_session.payment_status == 'paid':
                 order.is_paid = True
                 order.save()
@@ -48,9 +47,6 @@ class OrderDetails(TemplateView):
             if client_form.is_valid():
                 client = client_form.save()
             else:
-                kwargs['client_name'] = input_form['name']
-                kwargs['client_phone_number'] = input_form['phone_number']
-                kwargs['client_question'] = input_form['question']
                 context = self.get_context_data(**kwargs)
                 context.update(
                     {
@@ -160,10 +156,10 @@ def payment(request, order_id):
         mode='payment',
         metadata={'client_id': client.pk, 'order_id': order.pk},
         success_url=settings.DOMAIN +
-                    reverse('order', kwargs={'order_id': order.pk}) +
-                    '?stripe_session_id={CHECKOUT_SESSION_ID}',
+        reverse('order', kwargs={'order_id': order.pk}) +
+        '?stripe_session_id={CHECKOUT_SESSION_ID}',
         cancel_url=settings.DOMAIN +
-                   reverse('order', kwargs={'order_id': order.pk}) +
-                   '?stripe_session_id={CHECKOUT_SESSION_ID}'
+        reverse('order', kwargs={'order_id': order.pk}) +
+        '?stripe_session_id={CHECKOUT_SESSION_ID}'
     )
     return redirect(checkout_session.url, code=303)
