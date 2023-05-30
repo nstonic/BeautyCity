@@ -7,7 +7,7 @@ from orders.models import Order
 class OrderForm(ModelForm):
     class Meta:
         model = Order
-        fields = ['salon', 'master', 'service', 'time', 'cost', 'active']
+        fields = ['salon', 'master', 'service', 'time', 'cost', 'is_active']
         labels = {
             'salon': 'Салон',
             'master': 'Мастер',

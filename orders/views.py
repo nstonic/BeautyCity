@@ -1,3 +1,4 @@
+import phonenumbers
 import stripe
 from django.conf import settings
 from django.shortcuts import get_object_or_404, redirect, render
@@ -32,43 +33,32 @@ class OrderDetails(TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        input_form = self.request.POST
-        client_form = None
-        client = Client.objects.filter(
-            phone_number=input_form['phone_number']
-        ).first()
+        order_id = kwargs.get('order_id')
+        order = get_object_or_404(Order, pk=order_id)
+        input_phone_number = self.request.POST.get('phone_number')
+        comment = self.request.POST.get('comment')
+        if input_phone_number and input_phone_number.startswith('8'):
+            input_phone_number = input_phone_number.replace('8', '+7', 1)
+        client = Client.objects.filter(pk=input_phone_number).first()
         if not client:
-            client_form = ClientForm(input_form)
-        else:
-            if client.name != input_form['name']:
-                client_form = ClientForm(input_form, instance=client)
-
-        if client_form:
+            client_form = ClientForm(self.request.POST)
             if client_form.is_valid():
                 client = client_form.save()
             else:
-                context = self.get_context_data(**kwargs)
-                context.update(
-                    {
-                        'form': client_form,
-                        'client_name': input_form['name'],
-                        'client_phone_number': input_form['phone_number'],
-                        'client_question': input_form['question'],
-                    }
-                )
+                context = super().get_context_data(**kwargs)
+                context.update({
+                    'form': client_form,
+                    'order': order
+                })
                 return render(
                     self.request,
                     self.template_name,
-                    context,
+                    context=context
                 )
-
-        order_id = kwargs['order_id']
-        Order.objects.filter(id=order_id).update(
-            client=client,
-            active=True,
-            comment=input_form['question'],
-        )
-
+        order.client = client
+        order.comment = comment
+        order.is_active = True
+        order.save()
         return redirect('order', order_id=order_id)
 
 
@@ -95,7 +85,7 @@ class MakeOrder(TemplateView):
         order_form = OrderForm(input_form)
         if order_form.is_valid():
             order = order_form.save(commit=False)
-            order.active = False
+            order.is_active = False
             order.save()
             return redirect('order', order_id=order.pk)
         else:
@@ -156,10 +146,10 @@ def payment(request, order_id):
         mode='payment',
         metadata={'client_id': client.pk, 'order_id': order.pk},
         success_url=settings.DOMAIN +
-        reverse('order', kwargs={'order_id': order.pk}) +
-        '?stripe_session_id={CHECKOUT_SESSION_ID}',
+                    reverse('order', kwargs={'order_id': order.pk}) +
+                    '?stripe_session_id={CHECKOUT_SESSION_ID}',
         cancel_url=settings.DOMAIN +
-        reverse('order', kwargs={'order_id': order.pk}) +
-        '?stripe_session_id={CHECKOUT_SESSION_ID}'
+                   reverse('order', kwargs={'order_id': order.pk}) +
+                   '?stripe_session_id={CHECKOUT_SESSION_ID}'
     )
     return redirect(checkout_session.url, code=303)

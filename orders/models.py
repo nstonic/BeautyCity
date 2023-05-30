@@ -16,7 +16,7 @@ def time_is_half_hour_interval(time):
 
 
 class Order(models.Model):
-    active = models.BooleanField(verbose_name='Активен')
+    is_active = models.BooleanField(verbose_name='Активен')
     is_paid = models.BooleanField(default=False, verbose_name='Оплачен')
     salon = models.ForeignKey(
         Salon,
@@ -68,7 +68,7 @@ class Order(models.Model):
     )
 
     class Meta:
-        unique_together = ['master', 'time', 'active']
+        unique_together = ['master', 'time', 'is_active']
 
     def __str__(self):
         return f'{self.master} - {self.service}, {self.time}'
