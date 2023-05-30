@@ -1,4 +1,3 @@
-import phonenumbers
 import stripe
 from django.conf import settings
 from django.shortcuts import get_object_or_404, redirect, render
@@ -136,6 +135,10 @@ def payment(request, order_id):
         currency='rub'
     )
     price_id = response['id']
+    end_point_url = settings.DOMAIN + \
+                    reverse('order', kwargs={'order_id': order.pk}) + \
+                    '?stripe_session_id={CHECKOUT_SESSION_ID}'
+
     checkout_session = stripe.checkout.Session.create(
         line_items=[
             {
@@ -145,11 +148,7 @@ def payment(request, order_id):
         ],
         mode='payment',
         metadata={'client_id': client.pk, 'order_id': order.pk},
-        success_url=settings.DOMAIN +
-                    reverse('order', kwargs={'order_id': order.pk}) +
-                    '?stripe_session_id={CHECKOUT_SESSION_ID}',
-        cancel_url=settings.DOMAIN +
-                   reverse('order', kwargs={'order_id': order.pk}) +
-                   '?stripe_session_id={CHECKOUT_SESSION_ID}'
+        success_url=end_point_url,
+        cancel_url=end_point_url
     )
     return redirect(checkout_session.url, code=303)
