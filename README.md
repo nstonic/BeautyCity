@@ -1,6 +1,7 @@
 # Beauty city
 
 This is a Django-based website. A user can sign up for a service in a beauty salon.
+[View demo](http://80.249.149.24:8000)
 
 ![Home page](screenshots/home_page.png)
 
