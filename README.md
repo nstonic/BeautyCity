@@ -69,8 +69,3 @@ python manage.py runserver
 
 - Go to [the admin site](http://127.0.0.1:8000/admin/) and fill the base;
 - Go to [the home page](http://127.0.0.1:8000/).
-
-## Project goals
-
-The project was created for educational purposes.
-It's a group project for python and web developers at [Devman](https://dvmn.org).
